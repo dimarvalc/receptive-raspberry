@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+
+// 1. Fetch all your Markdown portfolio logs automatically
+const allPosts = await getCollection('cachets');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 2. Fetch the top 3 absolute newest projects for the main teaser spotlight
+const recentProjects = sortedPosts.slice(0, 3);
+
+const renderedProjects = await Promise.all(
+  recentProjects.map(async (postItem) => {
+    const { Content } = await render(postItem);
+    return { post: postItem, Content };
+  })
+);
+
+// 3. Automate image matching (Scans your single asset directory)
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/cachets/*.webp');
+---
+
+<Layout title="The Digital Archivist | Philately & AI Restoration">
+  <main class="min-h-screen bg-slate-50 py-12 px-6">
+    
+    <!-- Site Banner Header -->
+    <header class="max-w-6xl mx-auto mb-16 text-center">
+      <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+        The Digital Archivist: Philately & AI Restoration
+      </h1>
+      <p class="text-slate-500 font-medium text-lg mt-2">
+        A living historical directory of {sortedPosts.length} custom envelope cachets created with Gemini AI since May 2025.
+      </p>
+    </header>
+
+    <!-- Recent Activity Showcase Area -->
+    <div class="max-w-7xl mx-auto flex flex-col gap-16">
+      {renderedProjects.map(({ post, Content }) => {
+        const aspectClass = 
+            post.data.envelopeSize === 'c10' ? 'aspect-[2.3/1]' :  // Commercial # 10 [4.125" x 9.5"]
+			post.data.envelopeSize === '5x7' ? 'aspect-[1.4/1]' :  // Postcard [5" x 7"]
+			post.data.envelopeSize === 'a7' ? 'aspect-[1.4/1]' :   // Announcement A7 [5.25" x 7.25"]   
+			post.data.envelopeSize === '9bar' ? 'aspect-[1.52/1]' :  // Baronial 9 Bar [5.75" x 8.75"]
+			post.data.envelopeSize === 'c634' ? 'aspect-[1.8/1]' :   // Commercial # 6-3/4 [3.625" x 6.25"]
+			'aspect-[1.8/1]';                                        // The fallback safety net if anything breaks	  
+        const frontKey = `/src/assets/cachets/${post.data.imageStem}-front-${post.data.envelopeSize}.webp`;
+        const backKey = `/src/assets/cachets/${post.data.imageStem}-back-${post.data.envelopeSize}.webp`;
+        const cancelKey = `/src/assets/cachets/${post.data.imageStem}-front-cancel-${post.data.envelopeSize}.webp`;
+        
+        return (
+          <article class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm relative overflow-hidden">
+            
+            <!-- Project Top Header Badge Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-4 mb-6 gap-2">
+              <div class="flex items-center gap-2">
+                <span class={`text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                  post.data.envelopeSize === 'c10' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                  post.data.envelopeSize === '9bar' ? 'bg-teal-100 text-teal-800 border border-teal-200' :
+                  post.data.envelopeSize === '5x7' || post.data.envelopeSize === 'a7' ? 'bg-purple-100 text-purple-800 border border-purple-200' :
+                  'bg-blue-100 text-blue-800 border border-blue-200'
+                }`}>
+                  Format: {post.data.envelopeSize.toUpperCase()}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })} • Sequence #{post.data.sequence}
+                </span>
+              </div>
+              <h2 class="text-2xl font-black text-slate-800 tracking-tight">{post.data.title}</h2>
+            </div>
+
+            <!-- Responsive Columns View Matrix -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              
+              <!-- Front Canvas -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner ${aspectClass}`}>
+                  {allImages[frontKey] ? <Image src={allImages[frontKey]()} alt="Front Envelope View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm" /> : <div class="text-xs text-rose-500 font-mono">Front Image Missing</div>}
+                </div>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design</p>
+              </div>
+
+              <!-- Back Canvas -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner ${aspectClass}`}>
+                  {post.data.hasBack && allImages[backKey] ? (
+                    <Image src={allImages[backKey]()} alt="Back Envelope View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm" />
+                  ) : (
+                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">No Content on Back</div>
+                  )}
+                </div>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Layout</p>
+              </div>
+
+              <!-- Cancel Canvas -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner ${aspectClass}`}>
+                  {post.data.hasCancel && allImages[cancelKey] ? (
+                    <Image src={allImages[cancelKey]()} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm" />
+                  ) : (
+                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
+                  )}
+                </div>
+                <p class="text-[10px] font-bold text-center text-blue-600 mt-2 tracking-widest uppercase">Canceled Version</p>
+              </div>
+
+            </div>
+
+            <!-- Markdown Text Rendering Segment -->
+            <div class="prose prose-slate max-w-none border-t border-slate-100 pt-6 text-slate-700">
+              <Content />
+            </div>
+
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Master Deep Link Archive Button -->
+    <footer class="max-w-xl mx-auto text-center mt-20">
+      <a href="/cachets/1" class="inline-block bg-blue-600 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-md hover:bg-blue-700 transition duration-150 transform hover:-translate-y-0.5">
+        Browse Full {sortedPosts.length} Item Historical Archive →
+      </a>
+    </footer>
+
+  </main>
+</Layout>

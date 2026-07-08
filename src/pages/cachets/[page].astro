@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+
+// 1. INITIALIZE IMAGE GLOB FIRST (Moved up here so it's ready instantly!)
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/cachets/*.webp');
+
+// 2. Tell Astro to slice your 232+ collection into pages of 10 items each
+export async function getStaticPaths({ paginate }) {
+  const allPosts = await getCollection('cachets');
+  const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  
+  return paginate(sortedPosts, { pageSize: 10 }); // Change 10 to whatever number you prefer!
+}
+
+// 3. Grab the specific page data for the current screen
+const { page } = Astro.props;
+
+// 4. Process the text content AND resolve perfect image paths ahead of time
+const renderedPosts = await Promise.all(
+  page.data.map(async (postItem) => {
+    const { Content } = await render(postItem);
+    
+    // Construct the dynamic path keys
+    const frontKey = `/src/assets/cachets/${postItem.data.imageStem}-front-${postItem.data.envelopeSize}.webp`;
+    const backKey = `/src/assets/cachets/${postItem.data.imageStem}-back-${postItem.data.envelopeSize}.webp`;
+    const cancelKey = `/src/assets/cachets/${postItem.data.imageStem}-front-cancel-${postItem.data.envelopeSize}.webp`;
+
+    // Resolve the real static assets natively 
+    const frontAsset = allImages[frontKey] ? await allImages[frontKey]() : null;
+    const backAsset = allImages[backKey] ? await allImages[backKey]() : null;
+    const cancelAsset = allImages[cancelKey] ? await allImages[cancelKey]() : null;
+
+    return { 
+      post: postItem, 
+      Content,
+      frontSrc: frontAsset?.default?.src || '',
+      backSrc: backAsset?.default?.src || '',
+      cancelSrc: cancelAsset?.default?.src || ''
+    };
+  })
+);
+
+---
+
+<Layout title={`Cachet Archive - Page ${page.currentPage}`}>
+  <main class="min-h-screen bg-slate-50 py-12 px-6">
+    
+    <header class="max-w-6xl mx-auto mb-16 text-center">
+      <h1 class="text-4xl font-black text-slate-900 tracking-tight">Philatelic Cachet Diary</h1>
+      <p class="text-slate-500 font-medium text-lg mt-2">
+        Showing covers {page.start + 1} – {page.end + 1} of {page.total} total designs
+      </p>
+    </header>
+
+    <!-- The Grid Loop -->
+    <div class="max-w-7xl mx-auto flex flex-col gap-16" id="cachet-archive-grid">
+      {renderedPosts.map(({ post, Content, frontSrc, backSrc, cancelSrc }) => {
+        
+        // 1. Dynamic Width & Height boundaries for the Lightbox Engine
+        const isC10 = post.data.envelopeSize === 'c10';
+        const is9Bar = post.data.envelopeSize === '9bar';
+        const isTall = post.data.envelopeSize === '5x7' || post.data.envelopeSize === 'a7';
+
+        const pswpWidth = isC10 ? "2300" : is9Bar ? "1520" : isTall ? "1400" : "1800";
+        const pswpHeight = "1000"; // Fixed base structural unit height
+
+        const aspectClass = 
+          isC10 ? 'aspect-[2.3/1]' : 
+          isTall ? 'aspect-[1.4/1]' : 
+          is9Bar ? 'aspect-[1.52/1]' : 
+          'aspect-[1.8/1]';
+
+        return (
+          <article class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">
+            
+            <!-- Project Top Header -->
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-4 mb-6 gap-2">
+              <div>
+                <span class="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider mr-2">
+                  Size: {post.data.envelopeSize.toUpperCase()}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })} • Sequence #{post.data.sequence}
+                </span>
+              </div>
+              <h2 class="text-2xl font-black text-slate-800 tracking-tight">{post.data.title}</h2>
+            </div>
+
+            <!-- 3 Column Image Layout Grid Matrix -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              
+              <!-- Front Canvas View -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                  {frontSrc ? (
+                    <a href={frontSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={frontSrc} alt="Front Design View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    </a>
+                  ) : (
+                    <div class="text-xs text-rose-500 font-mono">Front Image Missing</div>
+                  )}
+                </div>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design</p>
+              </div>
+
+              <!-- Back Canvas View -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                  {post.data.hasBack && backSrc ? (
+                    <a href={backSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={backSrc} alt="Back Layout View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    </a>
+                  ) : (
+                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">No Content on Back</div>
+                  )}
+                </div>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Layout</p>
+              </div>
+
+              <!-- Cancel Canvas View -->
+              <div class="flex flex-col justify-between">
+                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                  {post.data.hasCancel && cancelSrc ? (
+                    <a href={cancelSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    </a>
+                  ) : (
+                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
+                  )}
+                </div>
+                <p class="text-[10px] font-bold text-center text-blue-600 mt-2 tracking-widest uppercase">Canceled Version</p>
+              </div>
+
+            </div>
+
+            <!-- Content Area Text Segments -->
+            <div class="prose prose-slate max-w-none border-t border-slate-100 pt-6 text-slate-700">
+              <Content />
+            </div>
+
+          </article>
+        );
+      })}
+    </div>
+
+
+
+    <!-- Navigation Buttons at the very bottom -->
+    <nav class="max-w-7xl mx-auto flex justify-between items-center mt-16 border-t border-slate-200 pt-8">
+      {page.url.prev ? <a href={page.url.prev} class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-slate-50">← Previous Page</a> : <div />}
+      <span class="text-sm font-mono text-slate-500">Page {page.currentPage} of {page.lastPage}</span>
+      {page.url.next ? <a href={page.url.next} class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-blue-700">Next Page →</a> : <div />}
+    </nav>
+
+  </main>
+</Layout>
+<!-- PhotoSwipe Lightbox Core Engine Wiring -->
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  // Automatically initialize the lightbox on any image wrapped in our special link tag
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#cachet-archive-grid',
+    children: 'a.lightbox-trigger',
+    pswpModule: () => import('photoswipe'),
+    // Adds a direct download button right into the image viewer control panel
+    bgOpacity: 0.9,
+    padding: { top: 20, bottom: 20, left: 20, right: 20 }
+  });
+
+  // Enable a custom download button inside the lightbox view
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'download-button',
+      order: 8,
+      isButton: true,
+      tagName: 'a',
+      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
+      onInit: (el, pswp) => {
+        el.setAttribute('download', '');
+        el.setAttribute('target', '_blank');
+        el.setAttribute('title', 'Download High-Res Original');
+        pswp.on('change', () => {
+          el.href = pswp.currSlide.data.src;
+        });
+      }
+    });
+  });
+
+  lightbox.init();
+</script>

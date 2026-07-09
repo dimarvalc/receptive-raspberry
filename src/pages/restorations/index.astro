@@ -1,0 +1,176 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+// 1. Initialize image tracking specifically for restoration folders
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/restorations/*.webp');
+
+// 2. Fetch and chronologically sort your photo restoration log registry
+const allRestorations = await getCollection('restorations');
+const sortedRestorations = allRestorations.sort((a, b) => b.data.sequence - a.data.sequence);
+
+const renderedRestorations = await Promise.all(
+  sortedRestorations.map(async (item) => {
+    const { Content } = await render(item);
+    
+    // Construct expected naming keys: "-before" and "-after"
+    const beforeKey = `/src/assets/restorations/${item.data.imageStem}-before.webp`;
+    const afterKey = `/src/assets/restorations/${item.data.imageStem}-after.webp`;
+
+    const beforeModule = allImages[beforeKey] ? await allImages[beforeKey]() : null;
+    const afterModule = allImages[afterKey] ? await allImages[afterKey]() : null;
+
+    return {
+      post: item,
+      Content,
+      beforeSrc: beforeModule?.default?.src || '',
+      afterSrc: afterModule?.default?.src || '',
+    };
+  })
+);
+---
+
+<Layout title="AI Photo Restoration Lab | Tomy's Digital Studio">
+  <main class="min-h-screen bg-slate-900 text-slate-100 py-12 px-6">
+    
+    <header class="max-w-4xl mx-auto mb-20 text-center">
+      <a href="/" class="text-xs font-bold text-blue-400 hover:text-blue-300 transition duration-150 uppercase tracking-widest block mb-4">← Back to Main Portfolio</a>
+      <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl">AI Photo Restoration Lab</h1>
+      <p class="text-slate-400 font-medium text-lg mt-3 max-w-2xl mx-auto">
+        Breathe new life into history. Drag the interactive sliders below to reveal full pixel-by-pixel comparisons between damaged historical documents and my AI-restored canvas matrices.
+      </p>
+    </header>
+
+    <!-- Main Comparison Grid Wrapper -->
+    <div class="max-w-5xl mx-auto flex flex-col gap-24">
+      {renderedRestorations.map(({ post, Content, beforeSrc, afterSrc }) => (
+        <article class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- LEFT SIDE: Technical Project Information Data Card -->
+          <div class="lg:col-span-4 flex flex-col justify-between h-full py-2">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-[10px] font-black tracking-widest uppercase bg-blue-500/20 text-blue-400 px-2.5 py-1 rounded-full border border-blue-500/30">
+                  Lab Index #{post.data.sequence}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit' })}
+                </span>
+              </div>
+              <h2 class="text-2xl font-black text-white tracking-tight mb-4">{post.data.title}</h2>
+              
+              <!-- Markdown Log Story -->
+              <div class="prose prose-invert prose-slate max-w-none text-slate-300 text-sm leading-relaxed border-t border-slate-700/60 pt-4">
+                <Content />
+              </div>
+            </div>
+            
+            <div class="mt-6 flex gap-4 text-xs font-bold text-slate-400 font-mono">
+              <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-red-400"></div> Left: Damaged</div>
+              <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> Right: Restored</div>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE: The Interactive Split-Screen Slider Frame Container -->
+          <div class="lg:col-span-8">
+            {beforeSrc && afterSrc ? (
+              <div class="slider-container relative select-none overflow-hidden rounded-xl border border-slate-700 shadow-2xl aspect-[4/3] w-full bg-slate-950">
+                
+                <!-- The "After" Pristine Image Panel (Base Layer) -->
+                <img src={afterSrc} alt="Restored Masterpiece View" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                
+                <!-- The "Before" Damaged Image Panel (Top Cropped Layer) -->
+                <div class="slider-before-layer absolute inset-0 w-1/2 h-full overflow-hidden pointer-events-none">
+                  <img src={beforeSrc} alt="Original Damaged Historical Document View" class="absolute inset-0 w-full h-full object-cover max-w-none" />
+                </div>
+
+                <!-- The Interactive Centered Drag Bar Line Handle -->
+                <div class="slider-handle absolute top-0 bottom-0 left-1/2 w-1 bg-white cursor-ew-resize flex items-center justify-center -ml-0.5 shadow-2xl group transition-colors duration-150 hover:bg-blue-400">
+                  <div class="w-8 h-8 rounded-full bg-white text-slate-900 border border-slate-300 shadow-xl flex items-center justify-center font-bold text-sm tracking-tighter select-none pointer-events-none group-hover:bg-blue-400 group-hover:text-white transition-colors duration-150">
+                    ↔
+                  </div>
+                </div>
+
+              </div>
+            ) : (
+              <div class="bg-slate-900 border border-dashed border-slate-700 rounded-xl aspect-[4/3] flex flex-col items-center justify-center text-slate-500 gap-2">
+                <span class="text-sm font-mono">Missing Source Asset Elements</span>
+                <span class="text-xs text-slate-600">Ensure both before/after images are named correctly.</span>
+              </div>
+            )}
+          </div>
+
+        </article>
+      ))}
+    </div>
+
+  </main>
+</Layout>
+
+<!-- Core Vanilla JavaScript Slider Tracker Engine -->
+<script>
+  function initializeSliders() {
+    const containers = document.querySelectorAll('.slider-container');
+    
+    containers.forEach((container) => {
+      const containerElement = container as HTMLElement;
+      const handle = containerElement.querySelector('.slider-handle') as HTMLElement;
+      const beforeLayer = containerElement.querySelector('.slider-before-layer') as HTMLElement;
+      const beforeImg = beforeLayer.querySelector('img') as HTMLElement;
+
+      if (!handle || !beforeLayer || !beforeImg) return;
+
+      // Update inner image width rule whenever container scales out dynamically
+      const resizeObserver = new ResizeObserver(() => {
+        beforeImg.style.width = `${containerElement.offsetWidth}px`;
+        beforeImg.style.height = `${containerElement.offsetHeight}px`;
+      });
+      resizeObserver.observe(containerElement);
+
+      let isDragging = false;
+
+      function moveSlider(clientX: number) {
+        const rect = containerElement.getBoundingClientRect();
+        let positionX = clientX - rect.left;
+        
+        // Pin boundary locks between 0% and 100% of container frame width
+        if (positionX < 0) positionX = 0;
+        if (positionX > rect.width) positionX = rect.width;
+
+        const percentage = (positionX / rect.width) * 100;
+        
+        // Smoothly adjust positions across pixel columns
+        handle.style.left = `${percentage}%`;
+        beforeLayer.style.width = `${percentage}%`;
+      }
+
+      // Desktop Mouse Interaction Triggers
+      containerElement.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        moveSlider(e.clientX);
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        moveSlider(e.clientX);
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      // Mobile Touch Interaction Triggers
+      containerElement.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        if (e.touches[0]) moveSlider(e.touches[0].clientX);
+      });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        if (e.touches[0]) moveSlider(e.touches[0].clientX);
+      });
+
+      window.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+    </script>

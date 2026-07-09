@@ -173,4 +173,9 @@ const renderedRestorations = await Promise.all(
       window.addEventListener('touchend', () => {
         isDragging = false;
       });
-    </script>
+    }); // <--- 🔧 THIS CLOSING WAS MISSING!
+  }
+
+  // Fire up the slider tracking engine on page load
+  initializeSliders();
+</script>

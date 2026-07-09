@@ -27,18 +27,21 @@ const restorations = defineCollection({
 });
 
 // 3. Banknotes Archive (Tracks front/back views and denomination sets)
+ standards & file tracking)
 const banknotes = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/banknotes" }),
   schema: z.object({
-    title: z.string(),
-    country: z.string(),
-    denomination: z.string(),
-    seriesYear: z.string(),
-    sequence: z.string(),
-    setName: z.string(), // Groups individual notes into full sets (e.g. "1954 Emergency Issue")
-    imageStem: z.string(),
+    title: z.string(),          // e.g., "100 Escudos"
+    country: z.string(),        // e.g., "Mozambique"
+    catalogNumber: z.string(),  // 🎯 Alphanumeric support for varieties (e.g., "112b", "W345", "206a1")
+    denomination: z.string(),   // e.g., "100"
+    seriesYear: z.string(),     // e.g., "1976"
+    sequence: z.string(),       // Your internal listing placement counter
+    setName: z.string().optional(), // Optional grouping for multi-note release issuance runs
+    imageStem: z.string(),      // Will perfectly map straight to: "mozambique-119"
   }),
 });
+
 
 // 4. Stocks Ledger (Tracks shared quantities and specific color varieties)
 const stocks = defineCollection({

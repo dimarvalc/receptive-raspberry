@@ -27,8 +27,7 @@ const restorations = defineCollection({
 });
 
 // 3. Banknotes Archive (Tracks front/back views and denomination sets)
- standards & file tracking)
-const banknotes = defineCollection({
+ const banknotes = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/banknotes" }),
   schema: z.object({
     title: z.string(),          // e.g., "100 Escudos"

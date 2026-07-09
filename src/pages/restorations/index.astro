@@ -116,7 +116,7 @@ const renderedRestorations = await Promise.all(
       const containerElement = container as HTMLElement;
       const handle = containerElement.querySelector('.slider-handle') as HTMLElement;
       const beforeLayer = containerElement.querySelector('.slider-before-layer') as HTMLElement;
-      const beforeImg = beforeLayer.querySelector('img') as HTMLElement;
+      const beforeImg = beforeLayer?.querySelector('img') as HTMLElement;
 
       if (!handle || !beforeLayer || !beforeImg) return;
 
@@ -162,18 +162,18 @@ const renderedRestorations = await Promise.all(
       // Mobile Touch Interaction Triggers
       containerElement.addEventListener('touchstart', (e) => {
         isDragging = true;
-        if (e.touches[0]) moveSlider(e.touches[0].clientX);
+        if (e.touches && e.touches[0]) moveSlider(e.touches[0].clientX);
       });
 
       window.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
-        if (e.touches[0]) moveSlider(e.touches[0].clientX);
+        if (e.touches && e.touches[0]) moveSlider(e.touches[0].clientX);
       });
 
       window.addEventListener('touchend', () => {
         isDragging = false;
       });
-    }); // <--- 🔧 THIS CLOSING WAS MISSING!
+    });
   }
 
   // Fire up the slider tracking engine on page load

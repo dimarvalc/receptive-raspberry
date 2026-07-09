@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+// 1. Accept dynamic title settings from your portfolio pages
+const { title } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -9,7 +11,8 @@ import '../styles/global.css';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<!-- 2. Use the real variable title instead of Astro Basics -->
+		<title>{title || "The Digital Archivist"}</title>
 	</head>
 	<body>
 		<slot />

@@ -45,26 +45,21 @@ const renderedPosts = await Promise.all(
 ---
 
 <Layout title={`Cachet Archive - Page ${page.currentPage}`}>
-  <main class="min-h-screen bg-slate-50 py-12 px-6">
+  <main class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-slate-100 py-12 px-6">
     
     <header class="max-w-6xl mx-auto mb-16 text-center">
-      <h1 class="text-4xl font-black text-slate-900 tracking-tight">Philatelic Cachet Diary</h1>
-      <p class="text-slate-500 font-medium text-lg mt-2">
-        Showing covers {page.start + 1} – {page.end + 1} of {page.total} total designs
-      </p>
+      <a href="/" class="text-xs font-bold text-blue-400 hover:text-blue-300 transition duration-150 uppercase tracking-widest block mb-4">← Back to Dashboard Overview</a>
+      <h1 class="text-4xl font-black text-white tracking-tight sm:text-5xl">Philatelic Cover Master Archive</h1>
+      <p class="text-slate-400 font-medium mt-3">Viewing catalog entries {page.start + 1} through {page.end + 1} of your historical ledger database.</p>
     </header>
 
-    <!-- The Grid Loop -->
+    <!-- The Grid Loop Layout Grid (Explicit matching trigger ID) -->
     <div class="max-w-7xl mx-auto flex flex-col gap-16" id="cachet-archive-grid">
-      {renderedPosts.map(({ post, Content, frontSrc, backSrc, cancelSrc }) => {
+      {renderedPosts.map(({ post, Content, frontSrc, backSrc, cancelSrc, frontW, frontH, backW, backH, cancelW, cancelH }) => {
         
-        // 1. Dynamic Width & Height boundaries for the Lightbox Engine
         const isC10 = post.data.envelopeSize === 'c10';
         const is9Bar = post.data.envelopeSize === '9bar';
         const isTall = post.data.envelopeSize === '5x7' || post.data.envelopeSize === 'a7';
-
-        const pswpWidth = isC10 ? "2300" : is9Bar ? "1520" : isTall ? "1400" : "1800";
-        const pswpHeight = "1000"; // Fixed base structural unit height
 
         const aspectClass = 
           isC10 ? 'aspect-[2.3/1]' : 
@@ -73,70 +68,74 @@ const renderedPosts = await Promise.all(
           'aspect-[1.8/1]';
 
         return (
-          <article class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">
+          <article class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm">
             
-            <!-- Project Top Header -->
-            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-4 mb-6 gap-2">
+            <!-- Card Top Header Section -->
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-700/60 pb-4 mb-6 gap-2">
               <div>
-                <span class="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider mr-2">
+                <span class="text-xs font-bold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 uppercase tracking-wider mr-2">
                   Size: {post.data.envelopeSize.toUpperCase()}
                 </span>
                 <span class="text-xs text-slate-400 font-mono">
                   {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })} • Sequence #{post.data.sequence}
                 </span>
               </div>
-              <h2 class="text-2xl font-black text-slate-800 tracking-tight">{post.data.title}</h2>
+              <h2 class="text-2xl font-black text-white tracking-tight">{post.data.title}</h2>
             </div>
 
-            <!-- 3 Column Image Layout Grid Matrix -->
+            <!-- 3-Column Visual Presentation Grid Matrix (Light canvas backings to keep envelope transparency perfect) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               
               <!-- Front Canvas View -->
               <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {frontSrc ? (
-                    <a href={frontSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={frontSrc} alt="Front Design View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    <a href={frontSrc} data-pswp-width={frontW} data-pswp-height={frontH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={frontSrc} alt="Front Design View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
                     <div class="text-xs text-rose-500 font-mono">Front Image Missing</div>
                   )}
                 </div>
-                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design Layout</p>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design</p>
               </div>
 
               <!-- Back Canvas View -->
               <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {post.data.hasBack && backSrc ? (
-                    <a href={backSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={backSrc} alt="Back Layout View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    <a href={backSrc} data-pswp-width={backW} data-pswp-height={backH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={backSrc} alt="Back Layout View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
-                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">No Content on Back</div>
+                    <div class="text-xs text-slate-500 italic font-mono flex items-center justify-center h-full">No Content on Back</div>
                   )}
                 </div>
-                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Design Layout</p>
+                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Layout</p>
               </div>
 
               <!-- Cancel Canvas View -->
               <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
+                <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {post.data.hasCancel && cancelSrc ? (
-                    <a href={cancelSrc} data-pswp-width={pswpWidth} data-pswp-height={pswpHeight} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
+                    <a href={cancelSrc} data-pswp-width={cancelW} data-pswp-height={cancelH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                      <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
-                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
+                    <div class="text-xs text-slate-500 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
                   )}
                 </div>
-                <p class="text-[10px] font-bold text-center text-blue-600 mt-2 tracking-widest uppercase">Canceled Version</p>
+                <p class="text-[10px] font-bold text-center text-blue-400 mt-2 tracking-widest uppercase">Canceled Version</p>
               </div>
 
             </div>
 
-            <!-- Content Area Text Segments -->
-            <div class="prose prose-slate max-w-none border-t border-slate-100 pt-6 text-slate-700">
+            <!-- Content Area Text Segments with Custom Typography -->
+            <div class="prose prose-invert prose-slate max-w-none border-t border-slate-700/60 pt-6 text-slate-300
+              prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
+              prose-p:leading-relaxed prose-p:text-slate-300
+              prose-strong:text-blue-400 prose-strong:font-bold
+              prose-ul:list-disc prose-ul:pl-5 prose-li:my-1">
               <Content />
             </div>
 
@@ -145,19 +144,16 @@ const renderedPosts = await Promise.all(
       })}
     </div>
 
-
-
-    <!-- Navigation Buttons at the very bottom -->
-    <nav class="max-w-7xl mx-auto flex justify-between items-center mt-16 border-t border-slate-200 pt-8">
-      {page.url.prev ? <a href={page.url.prev} class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-slate-50">← Previous Page</a> : <div />}
-      <span class="text-sm font-mono text-slate-500">Page {page.currentPage} of {page.lastPage}</span>
-      {page.url.next ? <a href={page.url.next} class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-blue-700">Next Page →</a> : <div />}
+    <!-- Pagination Navigation Controls -->
+    <nav class="max-w-xl mx-auto flex items-center justify-between mt-16 font-medium font-mono text-sm">
+      {page.url.prev ? <a href={page.url.prev} class="bg-slate-800 text-slate-200 border border-slate-700 px-5 py-2.5 rounded-xl shadow-md hover:bg-slate-700 transition duration-150">← Previous Page</a> : <span class="text-slate-600 border border-slate-800/80 px-5 py-2.5 rounded-xl cursor-not-allowed">← Previous Page</span>}
+      <span class="text-slate-400">Page {page.currentPage} of {page.lastPage}</span>
+      {page.url.next ? <a href={page.url.next} class="bg-slate-800 text-slate-200 border border-slate-700 px-5 py-2.5 rounded-xl shadow-md hover:bg-slate-700 transition duration-150">Next Page →</a> : <span class="text-slate-600 border border-slate-800/80 px-5 py-2.5 rounded-xl cursor-not-allowed">Next Page →</span>}
     </nav>
 
   </main>
 </Layout>
 
-<!-- PhotoSwipe Lightbox Standard Engine (Mirroring Your Working Homepage) -->
 <script>
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
   import 'photoswipe/style.css';
@@ -176,7 +172,7 @@ const renderedPosts = await Promise.all(
       order: 8,
       isButton: true,
       tagName: 'a',
-      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24" style="margin-top:10px;"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
+      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
       onInit: (el, pswp) => {
         el.setAttribute('download', '');
         el.setAttribute('target', '_blank');
@@ -190,6 +186,7 @@ const renderedPosts = await Promise.all(
 
   lightbox.init();
 </script>
+
 
 
 

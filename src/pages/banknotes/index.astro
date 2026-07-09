@@ -1,0 +1,154 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+// 1. Initialize image tracking specifically for banknotes directory folder
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/banknotes/*.webp');
+
+// 2. Fetch and chronologically list your currency ledger entries
+const allNotes = await getCollection('banknotes');
+const sortedNotes = allNotes.sort((a, b) => b.data.sequence.localeCompare(a.data.sequence));
+
+const renderedNotes = await Promise.all(
+  sortedNotes.map(async (item) => {
+    const { Content } = await render(item);
+    
+    // Construct absolute matching image path tokens
+    const frontKey = `/src/assets/banknotes/${item.data.imageStem}-front.webp`;
+    const backKey = `/src/assets/banknotes/${item.data.imageStem}-back.webp`;
+
+    const frontModule = allImages[frontKey] ? await allImages[frontKey]() : null;
+    const backModule = allImages[backKey] ? await allImages[backKey]() : null;
+
+    return {
+      post: item,
+      Content,
+      frontSrc: frontModule?.default?.src || '',
+      backSrc: backModule?.default?.src || '',
+      frontW: frontModule?.default?.width || 1800,
+      frontH: frontModule?.default?.height || 1000,
+      backW: backModule?.default?.width || 1800,
+      backH: backModule?.default?.height || 1000,
+    };
+  })
+);
+---
+
+<Layout title="World Banknotes Vault | Tomy's Digital Studio">
+  <main class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-slate-100 py-12 px-6">
+    
+    <!-- Header Controls -->
+    <header class="max-w-6xl mx-auto mb-16 text-center">
+      <a href="/" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition duration-150 uppercase tracking-widest block mb-4">← Back to Master Portfolio</a>
+      <h1 class="text-4xl font-black text-white tracking-tight sm:text-5xl">World Banknotes Vault</h1>
+      <p class="text-slate-400 font-medium mt-3 max-w-2xl mx-auto">
+        Global currency ledger database mapping individual varieties, serial sets, and specimen conditions calibrated directly against banknote.ws registry benchmarks.
+      </p>
+    </header>
+
+    <!-- Main Dynamic Listing Feed (Explicit target ID for lightboxes) -->
+    <div class="max-w-6xl mx-auto flex flex-col gap-12" id="banknotes-archive-grid">
+      {renderedNotes.map(({ post, Content, frontSrc, backSrc, frontW, frontH, backW, backH }) => (
+        <article class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- LEFT RETAINER CARD: Dynamic Context & Typography Content -->
+          <div class="lg:col-span-4 h-full flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-4">
+                <span class="text-[10px] font-black tracking-widest uppercase bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                  {post.data.country}
+                </span>
+                <span class="text-[11px] font-mono font-bold tracking-tight bg-slate-900 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
+                  Ref: {post.data.catalogNumber}
+                </span>
+              </div>
+
+              <h2 class="text-2xl font-black text-white tracking-tight mb-1">{post.data.title}</h2>
+              <div class="text-xs text-slate-400 font-mono mb-4">
+                Denomination: {post.data.denomination} • Year: {post.data.seriesYear}
+                {post.data.setName && ` • ${post.data.setName}`}
+              </div>
+
+              <!-- Markdown Log Verification Fields -->
+              <div class="prose prose-invert prose-slate max-w-none text-slate-300 text-sm border-t border-slate-700/60 pt-4
+                prose-headings:text-white prose-headings:font-bold prose-headings:mt-4 prose-headings:mb-2
+                prose-p:text-slate-400 prose-p:leading-relaxed prose-p:mb-3
+                prose-strong:text-emerald-400 prose-strong:font-bold
+                prose-ul:list-disc prose-ul:pl-4 prose-li:my-0.5">
+                <Content />
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT RETAINER CARD: The Symmetric 2-Column Presentation Grid Matrix -->
+          <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Front Face Side Canvas -->
+            <div class="flex flex-col justify-between">
+              <div class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl aspect-[1.8/1] flex items-center justify-center shadow-inner group hover:border-emerald-500/50 transition-colors duration-150">
+                {frontSrc ? (
+                  <a href={frontSrc} data-pswp-width={frontW} data-pswp-height={frontH} target="_blank" title="View Full-Size Front Face" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                    <img src={frontSrc} alt={`${post.data.title} Front View`} class="max-w-full max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
+                  </a>
+                ) : (
+                  <div class="text-xs text-rose-500 font-mono">Front Panel Image Missing</div>
+                )}
+              </div>
+              <p class="text-[9px] font-bold text-center text-slate-500 mt-2 tracking-widest uppercase">Front Surface Face</p>
+            </div>
+
+            <!-- Back Reverse Side Canvas -->
+            <div class="flex flex-col justify-between">
+              <div class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl aspect-[1.8/1] flex items-center justify-center shadow-inner group hover:border-emerald-500/50 transition-colors duration-150">
+                {backSrc ? (
+                  <a href={backSrc} data-pswp-width={backW} data-pswp-height={backH} target="_blank" title="View Full-Size Reverse Back" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                    <img src={backSrc} alt={`${post.data.title} Reverse View`} class="max-w-full max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
+                  </a>
+                ) : (
+                  <div class="text-xs text-slate-600 font-mono italic">Reverse Image Missing</div>
+                )}
+              </div>
+              <p class="text-[9px] font-bold text-center text-slate-500 mt-2 tracking-widest uppercase">Reverse Back Layer</p>
+            </div>
+
+          </div>
+
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<!-- PhotoSwipe Local Bundle Injection Framework Engine -->
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#banknotes-archive-grid',
+    children: 'a.lightbox-trigger',
+    pswpModule: () => import('photoswipe'),
+    bgOpacity: 0.96,
+    padding: { top: 30, bottom: 30, left: 30, right: 30 }
+  });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'download-button',
+      order: 8,
+      isButton: true,
+      tagName: 'a',
+      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
+      onInit: (el, pswp) => {
+        el.setAttribute('download', '');
+        el.setAttribute('target', '_blank');
+        el.setAttribute('title', 'Download High-Res Banknote Scan');
+        pswp.on('change', () => {
+          el.href = pswp.currSlide.data.src;
+        });
+      }
+    });
+  });
+
+  lightbox.init();
+</script>

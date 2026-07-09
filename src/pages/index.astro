@@ -1,174 +1,66 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
-
-// 1. Initialize image glob matching at the very top
-const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/cachets/*.webp');
-
-// 2. Fetch all Markdown logs and grab the top 3 newest designs
-const allPosts = await getCollection('cachets');
-const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentProjects = sortedPosts.slice(0, 3);
-
-const renderedProjects = await Promise.all(
-  recentProjects.map(async (postItem) => {
-    const { Content } = await render(postItem);
-    
-    const frontKey = `/src/assets/cachets/${postItem.data.imageStem}-front-${postItem.data.envelopeSize}.webp`;
-    const backKey = `/src/assets/cachets/${postItem.data.imageStem}-back-${postItem.data.envelopeSize}.webp`;
-    const cancelKey = `/src/assets/cachets/${postItem.data.imageStem}-front-cancel-${postItem.data.envelopeSize}.webp`;
-
-    const frontModule = allImages[frontKey] ? await allImages[frontKey]() : null;
-    const backModule = allImages[backKey] ? await allImages[backKey]() : null;
-    const cancelModule = allImages[cancelKey] ? await allImages[cancelKey]() : null;
-
-    return { 
-      post: postItem, 
-      Content,
-      frontSrc: frontModule?.default?.src || '',
-      backSrc: backModule?.default?.src || '',
-      cancelSrc: cancelModule?.default?.src || '',
-      frontW: frontModule?.default?.width || 1800,
-      frontH: frontModule?.default?.height || 1000,
-      backW: backModule?.default?.width || 1800,
-      backH: backModule?.default?.height || 1000,
-      cancelW: cancelModule?.default?.width || 1800,
-      cancelH: cancelModule?.default?.height || 1000
-    };
-  })
-);
 ---
 
-<Layout title="The Digital Archivist | Philately & AI Restoration">
-  <main class="min-h-screen bg-slate-50 py-12 px-6">
+<Layout title="Tomy's Digital Studio | Philately & AI Restoration">
+  <main class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-slate-100 flex flex-col justify-center py-16 px-6">
     
-    <header class="max-w-6xl mx-auto mb-16 text-center">
-      <h1 class="text-4xl font-black text-slate-900 tracking-tight">The Digital Archivist</h1>
-      <p class="text-slate-500 font-medium text-lg mt-2">
-        Teaser Spotlight: Displaying my latest 3 custom envelope designs.
+    <!-- Hero Branding Header -->
+    <header class="max-w-3xl mx-auto text-center mb-16 select-none">
+      <div class="inline-block bg-blue-500/10 border border-blue-500/20 text-blue-400 font-mono text-xs font-bold tracking-widest px-4 py-1.5 rounded-full uppercase mb-4 shadow-sm animate-pulse">
+        Now Live Workspace Pipeline
+      </div>
+      <h1 class="text-4xl font-black tracking-tight text-white sm:text-6xl uppercase bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+        Tomy's Digital Studio
+      </h1>
+      <p class="text-slate-400 font-medium text-lg sm:text-xl mt-4 max-w-xl mx-auto leading-relaxed">
+        Welcome to my centralized digital ledger archive. Explore my separate creative tracking database platforms below.
       </p>
     </header>
 
-    <!-- Recent Activity Showcase Grid (Matches Archive Page ID) -->
-    <div class="max-w-7xl mx-auto flex flex-col gap-16" id="cachet-archive-grid">
-      {renderedProjects.map(({ post, Content, frontSrc, backSrc, cancelSrc, frontW, frontH, backW, backH, cancelW, cancelH }) => {
-        
-        const isC10 = post.data.envelopeSize === 'c10';
-        const is9Bar = post.data.envelopeSize === '9bar';
-        const isTall = post.data.envelopeSize === '5x7' || post.data.envelopeSize === 'a7';
+    <!-- Side-by-Side Creative Dashboard Portals -->
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+      
+      <!-- PORTAL 1: PHILATELIC ARCHIVE -->
+      <a href="/cachets/1" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-blue-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/0 via-blue-600/0 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative z-10">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+            ✉️
+          </div>
+          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-blue-400 transition-colors duration-200">Philatelic Cover Archive</h2>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">
+            Browse through my complete, automated database of historical custom cachet envelope designs. Features a native high-resolution digital lightbox zoom viewer and file download tracking system.
+          </p>
+        </div>
+        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-blue-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+          Enter Catalog Database <span>→</span>
+        </div>
+      </a>
 
-        const aspectClass = 
-          isC10 ? 'aspect-[2.3/1]' : 
-          isTall ? 'aspect-[1.4/1]' : 
-          is9Bar ? 'aspect-[1.52/1]' : 
-          'aspect-[1.8/1]';
+      <!-- PORTAL 2: AI RESTORATION LAB -->
+      <a href="/restorations" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-emerald-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/0 via-emerald-600/0 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative z-10">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+            🖼️
+          </div>
+          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-emerald-400 transition-colors duration-200">AI Photo Restoration Lab</h2>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">
+            Step into the interactive comparison studio. Witness real-time pixel transformations between damaged historical portraits, documents, and my digitally restored canvas layers.
+          </p>
+        </div>
+        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+          Open Slider Studio <span>→</span>
+        </div>
+      </a>
 
-        return (
-          <article class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">
-            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-4 mb-6 gap-2">
-              <div>
-                <span class="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full uppercase tracking-wider mr-2">
-                  Size: {post.data.envelopeSize.toUpperCase()}
-                </span>
-                <span class="text-xs text-slate-400 font-mono">
-                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })} • Sequence #{post.data.sequence}
-                </span>
-              </div>
-              <h2 class="text-2xl font-black text-slate-800 tracking-tight">{post.data.title}</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              
-              <!-- Front Canvas View -->
-              <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
-                  {frontSrc ? (
-                    <a href={frontSrc} data-pswp-width={frontW} data-pswp-height={frontH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={frontSrc} alt="Front Design View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
-                    </a>
-                  ) : (
-                    <div class="text-xs text-rose-500 font-mono">Front Image Missing</div>
-                  )}
-                </div>
-                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design Layout</p>
-              </div>
-
-              <!-- Back Canvas View -->
-              <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
-                  {post.data.hasBack && backSrc ? (
-                    <a href={backSrc} data-pswp-width={backW} data-pswp-height={backH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={backSrc} alt="Back Layout View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
-                    </a>
-                  ) : (
-                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">No Content on Back</div>
-                  )}
-                </div>
-                <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Design Layout</p>
-              </div>
-
-              <!-- Cancel Canvas View -->
-              <div class="flex flex-col justify-between">
-                <div class={`bg-slate-50 border border-slate-100 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-400 transition-colors duration-150 ${aspectClass}`}>
-                  {post.data.hasCancel && cancelSrc ? (
-                    <a href={cancelSrc} data-pswp-width={cancelW} data-pswp-height={cancelH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain mix-blend-multiply filter drop-shadow-sm group-hover:scale-[1.01] transition-transform duration-150" />
-                    </a>
-                  ) : (
-                    <div class="text-xs text-slate-300 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
-                  )}
-                </div>
-                <p class="text-[10px] font-bold text-center text-blue-600 mt-2 tracking-widest uppercase">Canceled Version</p>
-              </div>
-
-            </div>
-
-            <div class="prose prose-slate max-w-none border-t border-slate-100 pt-6 text-slate-700">
-              <Content />
-            </div>
-          </article>
-        );
-      })}
     </div>
 
-    <footer class="max-w-xl mx-auto text-center mt-20">
-      <a href="/cachets/1" class="inline-block bg-blue-600 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-md hover:bg-blue-700 transition duration-150 transform hover:-translate-y-0.5">
-        Browse Full {sortedPosts.length} Item Historical Archive →
-      </a>
+    <!-- Small Professional System Footer -->
+    <footer class="max-w-md mx-auto text-center mt-20 text-[10px] font-bold text-slate-600 uppercase tracking-widest select-none">
+      Static Architecture Driven by Astro & Vercel
     </footer>
+
   </main>
 </Layout>
-
-<!-- PhotoSwipe Lightbox Script Core Engine Wiring for Homepage -->
-<script>
-  import PhotoSwipeLightbox from 'photoswipe/lightbox';
-  import 'photoswipe/style.css';
-
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '#cachet-archive-grid',
-    children: 'a.lightbox-trigger',
-    pswpModule: () => import('photoswipe'),
-    bgOpacity: 0.95,
-    padding: { top: 30, bottom: 30, left: 30, right: 30 }
-  });
-
-  lightbox.on('uiRegister', function() {
-    lightbox.pswp.ui.registerElement({
-      name: 'download-button',
-      order: 8,
-      isButton: true,
-      tagName: 'a',
-      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
-      onInit: (el, pswp) => {
-        el.setAttribute('download', '');
-        el.setAttribute('target', '_blank');
-        el.setAttribute('title', 'Download High-Res Original');
-        pswp.on('change', () => {
-          el.href = pswp.currSlide.data.src;
-        });
-      }
-    });
-  });
-
-  lightbox.init();
-</script>

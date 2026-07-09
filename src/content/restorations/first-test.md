@@ -1,7 +1,7 @@
 ---
 title: "Historical Portrait Restoration Test"
 pubDate: 2026-07-09
-sequence: 1
+sequence: "1"
 imageStem: "test-portrait"
 ---
 

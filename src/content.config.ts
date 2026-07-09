@@ -48,12 +48,15 @@ const stocks = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/stocks" }),
   schema: z.object({
     title: z.string(), // Company Name (e.g., "Puerto Rico Racing Association")
-    pubDate: z.coerce.date(),
+    pubDate: z.coerce.date(), // Date when the stock certificate was issued
+    cancelDate: z.coerce.date().optional(), // Optional Cancellation Date
+    serialNumber: z.string(), // Serial Number of the Certificate
     sharesCount: z.string(), // e.g., "1 Share", "100 Shares"
     colorVariety: z.string(), // e.g., "Orange Border", "Green Border"
     sequence: z.string(),
     companyStem: z.string(), // Groups shared entities together (e.g., "pr-racing-assoc")
     imageStem: z.string(), // Individual asset key
+    hasRevenueStamps: z.boolean().default(false),
   }),
 });
 

@@ -156,39 +156,42 @@ const renderedPosts = await Promise.all(
 
   </main>
 </Layout>
-<!-- PhotoSwipe Lightbox Core Engine Wiring -->
-<script>
-  import PhotoSwipeLightbox from 'photoswipe/lightbox';
-  import 'photoswipe/style.css';
+<!-- PhotoSwipe Lightbox Core Engine Wiring (Forced Client Loading) -->
+<script is:inline src="https://cloudflare.com"></script>
+<script is:inline src="https://cloudflare.com"></script>
+<link rel="stylesheet" href="https://cloudflare.com" />
 
-  // Automatically initialize the lightbox on any image wrapped in our special link tag
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '#cachet-archive-grid',
-    children: 'a.lightbox-trigger',
-    pswpModule: () => import('photoswipe'),
-    // Adds a direct download button right into the image viewer control panel
-    bgOpacity: 0.9,
-    padding: { top: 20, bottom: 20, left: 20, right: 20 }
-  });
-
-  // Enable a custom download button inside the lightbox view
-  lightbox.on('uiRegister', function() {
-    lightbox.pswp.ui.registerElement({
-      name: 'download-button',
-      order: 8,
-      isButton: true,
-      tagName: 'a',
-      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
-      onInit: (el, pswp) => {
-        el.setAttribute('download', '');
-        el.setAttribute('target', '_blank');
-        el.setAttribute('title', 'Download High-Res Original');
-        pswp.on('change', () => {
-          el.href = pswp.currSlide.data.src;
-        });
-      }
+<script is:inline>
+  // This script runs instantly in the browser as soon as the page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#cachet-archive-grid',
+      children: 'a.lightbox-trigger',
+      pswpModule: PhotoSwipe,
+      bgOpacity: 0.95,
+      padding: { top: 20, bottom: 20, left: 20, right: 20 }
     });
-  });
 
-  lightbox.init();
+    // Inject our custom native download icon directly into the top bar
+    lightbox.on('uiRegister', function() {
+      lightbox.pswp.ui.registerElement({
+        name: 'download-button',
+        order: 8,
+        isButton: true,
+        tagName: 'a',
+        html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24" style="margin-top:12px;"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
+        onInit: (el, pswp) => {
+          el.setAttribute('download', '');
+          el.setAttribute('target', '_blank');
+          el.setAttribute('title', 'Download Original Design');
+          pswp.on('change', () => {
+            el.href = pswp.currSlide.data.src;
+          });
+        }
+      });
+    });
+
+    lightbox.init();
+  });
 </script>
+

@@ -6,7 +6,7 @@ sharesCount: "25 Shares"
 colorVariety: "Green Border"
 sequence: "3"
 companyStem: "pennsylvania-salt-manufacturing"
-imageStem: "pennsylvania-salt-manufacturing-19381019"
+imageStem: "pennsylvania-salt-manufacturing-company-19381019"
 hasRevenueStamps: true
 ---
 

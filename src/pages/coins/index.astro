@@ -87,7 +87,7 @@ const renderedCoins = await Promise.all(
               <div class="bg-slate-950/40 border border-slate-800/60 p-6 rounded-xl aspect-square flex items-center justify-center shadow-inner group hover:border-yellow-500/30 transition-colors duration-150">
                 {obverseSrc ? (
                   <a href={obverseSrc} data-pswp-width={obverseW} data-pswp-height={obverseH} target="_blank" title="Expand Obverse Face View" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                    <img src={obverseSrc} alt={`${post.data.denomination} Obverse`} class="max-w-full max-h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.7)] group-hover:scale-[1.02] transition-transform duration-150 rounded-full" />
+                    <img src={obverseSrc} alt={`${post.data.denomination} Obverse`} class="max-w-full max-h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.7)] group-hover:scale-[1.02] transition-transform duration-150 rounded-full"/>
                   </a>
                 ) : (
                   <div class="text-xs text-rose-500 font-mono">Obverse Photo Missing</div>
@@ -101,7 +101,7 @@ const renderedCoins = await Promise.all(
               <div class="bg-slate-950/40 border border-slate-800/60 p-6 rounded-xl aspect-square flex items-center justify-center shadow-inner group hover:border-yellow-500/30 transition-colors duration-150">
                 {reverseSrc ? (
                   <a href={reverseSrc} data-pswp-width={reverseW} data-pswp-height={reverseH} target="_blank" title="Expand Reverse Layer View" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                    <img src={reverseSrc} alt={`${post.data.denomination} Reverse`} class="max-w-full max-h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.7)] group-hover:scale-[1.02] transition-transform duration-150 rounded-full" />
+                    <img src={reverseSrc} alt={`${post.data.denomination} Reverse`} class="max-w-full max-h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.7)] group-hover:scale-[1.02] transition-transform duration-150 rounded-full"/>
                   </a>
                 ) : (
                   <div class="text-xs text-slate-600 font-mono italic">Reverse Photo Missing</div>

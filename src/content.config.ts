@@ -74,4 +74,4 @@ const coins = defineCollection({
   }),
 });
 
-export const collections = { cachets, restorations, banknotes, stocks };
+export const collections = { cachets, restorations, banknotes, stocks, coins };

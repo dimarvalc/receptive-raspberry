@@ -6,7 +6,7 @@ denomination: "2 Kak"
 seriesYear: "1979"
 sequence: "1"
 setName: "1979 Post-Regime Emergency Issue"
-imageStem: "cambodia-p26a"
+imageStem: "cambodia-26a"
 ---
 
 ### Historical Catalog Verification Log

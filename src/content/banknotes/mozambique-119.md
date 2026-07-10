@@ -6,7 +6,7 @@ denomination: "1000 Escudos"
 seriesYear: "1972"
 sequence: "2"
 setName: "1976 Independence Transitional Issue"
-imageStem: "mozambique-p119"
+imageStem: "mozambique-119"
 ---
 
 ### Historical Catalog Verification Log

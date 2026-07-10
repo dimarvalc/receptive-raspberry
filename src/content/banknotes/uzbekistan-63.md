@@ -6,7 +6,7 @@ denomination: "5 Süm"
 seriesYear: "1992"
 sequence: "3"
 setName: "1992 Post-Soviet Independence Issue"
-imageStem: "uzbekistan-p3"
+imageStem: "uzbekistan-63"
 ---
 
 ### Historical Catalog Verification Log

@@ -59,4 +59,19 @@ const stocks = defineCollection({
   }),
 });
 
+// 5. COINS COLLECTION ARCHITECTURE
+const coins = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/coins" }),
+  schema: z.object({
+    denomination: z.string(),          // e.g., "20 Centavos"
+    country: z.string(),        // e.g., "Puerto Rico"
+    mintMark: z.string(),       // e.g., "PG", "S", "D", or "None"
+    seriesYear: z.string(),     // e.g., "1896"
+    composition: z.string(),    // e.g., "90% Silver", "Copper"
+    coinGrade: z.string(),      // e.g., "VF-30", "MS-65", "Circulated"
+    sequence: z.string(),       // Internal counter sorting slot
+    imageStem: z.string(),      // Base target key for your photos
+  }),
+});
+
 export const collections = { cachets, restorations, banknotes, stocks };

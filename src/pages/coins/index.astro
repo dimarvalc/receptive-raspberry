@@ -1,0 +1,154 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+// 1. Initialize image tracking matching your coins directory asset files
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/coins/*.webp');
+
+// 2. Fetch all coin logging records
+const allCoins = await getCollection('coins');
+
+// 3. Sort records chronologically by year (Newest First)
+const sortedCoins = allCoins.sort((a, b) => b.data.seriesYear.localeCompare(a.data.seriesYear));
+
+const renderedCoins = await Promise.all(
+  sortedCoins.map(async (item) => {
+    const { Content } = await render(item);
+    
+    // 🎯 Dynamically target your short -obv and -rev filename keys
+    const obverseKey = `/src/assets/coins/${item.data.imageStem}-obv.webp`;
+    const reverseKey = `/src/assets/coins/${item.data.imageStem}-rev.webp`;
+
+    const obverseModule = allImages[obverseKey] ? await allImages[obverseKey]() : null;
+    const reverseModule = allImages[reverseKey] ? await allImages[reverseKey]() : null;
+
+    return {
+      post: item,
+      Content,
+      obverseSrc: obverseModule?.default?.src || '',
+      reverseSrc: reverseModule?.default?.src || '',
+      obverseW: obverseModule?.default?.width || 1200,
+      obverseH: obverseModule?.default?.height || 1200,
+      reverseW: reverseModule?.default?.width || 1200,
+      reverseH: reverseModule?.default?.height || 1200,
+    };
+  })
+);
+---
+
+<Layout title="Numismatic Coins Vault | TSL Digital Studio">
+  <main class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-slate-100 py-12 px-6">
+    
+    <header class="max-w-4xl mx-auto mb-16 text-center">
+      <a href="/" class="text-xs font-bold text-amber-400 hover:text-amber-300 transition duration-150 uppercase tracking-widest block mb-4">← Back to Master Portfolio</a>
+      <h1 class="text-4xl font-black text-white tracking-tight sm:text-5xl">Numismatic Coins Vault</h1>
+      <p class="text-slate-400 font-medium mt-3 max-w-2xl mx-auto">
+        Curated physical coinage registry tracking historical strikes, metallic compositions, mint markings, and face values.
+      </p>
+    </header>
+
+    <!-- Main Coins Grid (Explicit target ID for lightboxes) -->
+    <div class="max-w-7xl mx-auto flex flex-col gap-12" id="coins-archive-grid">
+      {renderedCoins.map(({ post, Content, obverseSrc, reverseSrc, obverseW, obverseH, reverseW, reverseH }) => (
+        <article class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- LEFT DATA COLUMN -->
+          <div class="lg:col-span-4 flex flex-col justify-between h-full">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-4">
+                <span class="text-[10px] font-black tracking-widest uppercase bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20">
+                  {post.data.country}
+                </span>
+                <span class="text-[10px] font-black tracking-widest uppercase bg-slate-900 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">
+                  Grade: {post.data.coinGrade}
+                </span>
+              </div>
+
+              <!-- Displays Denomination prominently as requested -->
+              <h2 class="text-3xl font-black text-white tracking-tight mb-1">{post.data.denomination}</h2>
+              <p class="text-xs text-slate-500 font-mono mb-4">
+                Year: {post.data.seriesYear} • Mint Mark: {post.data.mintMark} • Metal: {post.data.composition}
+              </p>
+
+              <!-- Markdown Content Box -->
+              <div class="prose prose-invert prose-slate max-w-none text-slate-300 text-sm border-t border-slate-700/60 pt-4
+                prose-p:text-slate-400 prose-p:leading-relaxed prose-p:mb-3
+                prose-strong:text-amber-400 prose-strong:font-bold">
+                <Content />
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT IMAGE FRAME PANEL: 2-Column Symmetric Square Matrix -->
+          <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Obverse Side (Front) -->
+            <div class="flex flex-col justify-between">
+              <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl aspect-square flex items-center justify-center shadow-inner group hover:border-amber-500/50 transition-colors duration-150">
+                {obverseSrc ? (
+                  <a href={obverseSrc} data-pswp-width={obverseW} data-pswp-height={obverseH} target="_blank" title="Expand Obverse Face View" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                    <img src={obverseSrc} alt={`${post.data.denomination} Obverse`} class="max-w-full max-h-full object-contain filter drop-shadow-lg group-hover:scale-[1.02] transition-transform duration-150 rounded-full" />
+                  </a>
+                ) : (
+                  <div class="text-xs text-rose-500 font-mono">Obverse Photo Missing</div>
+                )}
+              </div>
+              <p class="text-[9px] font-bold text-center text-slate-500 mt-2 tracking-widest uppercase">Obverse (Front)</p>
+            </div>
+
+            <!-- Reverse Side (Back) -->
+            <div class="flex flex-col justify-between">
+              <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl aspect-square flex items-center justify-center shadow-inner group hover:border-amber-500/50 transition-colors duration-150">
+                {reverseSrc ? (
+                  <a href={reverseSrc} data-pswp-width={reverseW} data-pswp-height={reverseH} target="_blank" title="Expand Reverse Layer View" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
+                    <img src={reverseSrc} alt={`${post.data.denomination} Reverse`} class="max-w-full max-h-full object-contain filter drop-shadow-lg group-hover:scale-[1.02] transition-transform duration-150 rounded-full" />
+                  </a>
+                ) : (
+                  <div class="text-xs text-slate-600 font-mono italic">Reverse Photo Missing</div>
+                )}
+              </div>
+              <p class="text-[9px] font-bold text-center text-slate-500 mt-2 tracking-widest uppercase">Reverse (Back)</p>
+            </div>
+
+          </div>
+
+        </article>
+      ))}
+    </div>
+
+  </main>
+</Layout>
+
+<!-- PhotoSwipe Local Bundle Injection Engine -->
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#coins-archive-grid',
+    children: 'a.lightbox-trigger',
+    pswpModule: () => import('photoswipe'),
+    bgOpacity: 0.96,
+    padding: { top: 30, bottom: 30, left: 30, right: 30 }
+  });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp.ui.registerElement({
+      name: 'download-button',
+      order: 8,
+      isButton: true,
+      tagName: 'a',
+      html: '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="24" height="24"><path d="M23 14l-7 7-7-7h4V4h6v10h4zM4 26h24v2H4v-2z" fill="currentColor"/></svg>',
+      onInit: (el, pswp) => {
+        el.setAttribute('download', '');
+        el.setAttribute('target', '_blank');
+        el.setAttribute('title', 'Download High-Res Coin Photo');
+        pswp.on('change', () => {
+          el.href = pswp.currSlide.data.src;
+        });
+      }
+    });
+  });
+
+  lightbox.init();
+</script>

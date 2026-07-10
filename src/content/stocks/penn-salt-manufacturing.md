@@ -6,14 +6,14 @@ sharesCount: "25 Shares"
 colorVariety: "Green Border"
 sequence: "3"
 companyStem: "pennsylvania-salt-manufacturing"
-imageStem: "pennsylvania-salt-manufacturing-19381017"
+imageStem: "pennsylvania-salt-manufacturing-19381019"
 hasRevenueStamps: true
 ---
 
 ### Certificate Issuance Registry Log
 This exceptional mid-century security certificate features a striking, geometric **Green border frame** executed with high-security intaglio steel engraving matrices by the *American Bank Note Company, Philadelphia*. Established and incorporated in 1850, the Pennsylvania Salt Manufacturing Company was a premier American industrial chemical powerhouse. 
 
-This specific certificate (#35797) was officially issued on **October 17, 1938** for **25 shares** at a par value of $50 each out of a total corporate capitalization threshold of $7,500,000. It was issued directly to the legendary Wall Street brokerage house **E. A. Pierce & Co.** (the primary predecessor firm to *Merrill Lynch*). The face bears the signatures of the President and Treasurer, alongside a clean countersign verification stamp from the *Girard Trust Company* on October 19, 1938.
+This specific certificate (#35797) was officially issued on **October 19, 1938** for **25 shares** at a par value of $50 each out of a total corporate capitalization threshold of $7,500,000. It was issued directly to the legendary Wall Street brokerage house **E. A. Pierce & Co.** (the primary predecessor firm to *Merrill Lynch*). The face bears the signatures of the President and Treasurer, alongside a clean countersign verification stamp from the *Girard Trust Company* on October 19, 1938.
 
 ### Surface Engraving & Historical Condition
 The lower-center margin features a prominent architectural vignette displaying a historical profile silhouette framed within a bold **Pennsylvania Keystone** state crest symbol. The right border contains a specialized vertical numeral punch grid matrix for auditing share tiers.

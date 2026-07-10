@@ -7,12 +7,12 @@ sharesCount: "10 Shares"
 colorVariety: "Standard Issue"
 sequence: "2"
 companyStem: "bromfield-building-trust"
-imageStem: "bromfield-building-trust-19190318"
+imageStem: "bromfield-building-trust-19190308"
 hasRevenueStamps: true
 ---
 
 ### Certificate Issuance Registry Log
-This exceptional security instrument features an intricate, ornate black border frame with delicate geometric lathe patterns, characteristic of early 20th-century financial printing. Established as a real estate investment trust under a Massachusetts declaration dated February 14, 1895, this specific certificate (#568) was hand-issued on **March 18, 1919** for **10 shares** valued at $100 par value each. 
+This exceptional security instrument features an intricate, ornate black border frame with delicate geometric lathe patterns, characteristic of early 20th-century financial printing. Established as a real estate investment trust under a Massachusetts declaration dated February 14, 1895, this specific certificate (#568) was hand-issued on **March 8, 1919** for **10 shares** valued at $100 par value each. 
 
 The face is hand-signed by prominent Boston trustees, including *Richard H. Dana* (noted lawyer and author) and *Laurence Minot*, with legal countersigning executed by the *State Street Trust Company* as the official transfer agent.
 

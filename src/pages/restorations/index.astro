@@ -74,30 +74,39 @@ const renderedRestorations = await Promise.all(
           <!-- RIGHT SIDE: The Interactive Split-Screen Slider Frame Container -->
           <div class="lg:col-span-8">
             {beforeSrc && afterSrc ? (
-              <div class="slider-container relative select-none overflow-hidden rounded-xl border border-slate-700 shadow-2xl aspect-[4/3] w-full bg-slate-950">
+              <div class="slider-container relative select-none overflow-hidden rounded-xl border border-slate-700 shadow-2xl w-full bg-slate-950 max-w-2xl mx-auto cursor-ew-resize">
                 
                 <!-- The "After" Pristine Image Panel (Base Layer) -->
-                <img src={afterSrc} alt="Restored Masterpiece View" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-                
+                <img 
+                  src={afterSrc} 
+                  alt="Restored Masterpiece View" 
+                  class="w-full h-auto block pointer-events-none" 
+                />
+
                 <!-- The "Before" Damaged Image Panel (Top Cropped Layer) -->
-                <div class="slider-before-layer absolute inset-0 w-1/2 h-full overflow-hidden pointer-events-none">
-                  <img src={beforeSrc} alt="Original Damaged Historical Document View" class="absolute inset-0 w-full h-full object-cover max-w-none" />
+                <div class="slider-before-layer absolute inset-y-0 left-0 w-1/2 overflow-hidden pointer-events-none">
+                  <img 
+                    src={beforeSrc} 
+                    alt="Original Damaged Historical Document View" 
+                    class="absolute inset-y-0 left-0 max-w-none h-full object-cover pointer-events-none" 
+                  />
                 </div>
 
                 <!-- The Interactive Centered Drag Bar Line Handle -->
-                <div class="slider-handle absolute top-0 bottom-0 left-1/2 w-1 bg-white cursor-ew-resize flex items-center justify-center -ml-0.5 shadow-2xl group transition-colors duration-150 hover:bg-blue-400">
-                  <div class="w-8 h-8 rounded-full bg-white text-slate-900 border border-slate-300 shadow-xl flex items-center justify-center font-bold text-sm tracking-tighter select-none pointer-events-none group-hover:bg-blue-400 group-hover:text-white transition-colors duration-150">
+                <div class="slider-handle absolute inset-y-0 left-1/2 w-[3px] bg-white -ml-[1.5px] shadow-[0_0_10px_rgba(0,0,0,0.5)] flex items-center justify-center pointer-events-none z-20">
+                  <div class="w-8 h-8 rounded-full bg-white border border-slate-300 shadow-xl flex items-center justify-center font-bold text-slate-800 text-xs pointer-events-auto select-none">
                     ↔
                   </div>
                 </div>
 
               </div>
             ) : (
-              <div class="bg-slate-900 border border-dashed border-slate-700 rounded-xl aspect-[4/3] flex flex-col items-center justify-center text-slate-500 gap-2">
+              <div class="bg-slate-900 border border-dashed border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center text-slate-500 gap-2 w-full max-w-2xl mx-auto aspect-square">
                 <span class="text-sm font-mono">Missing Source Asset Elements</span>
                 <span class="text-xs text-slate-600">Ensure both before/after images are named correctly.</span>
               </div>
             )}
+
           </div>
 
         </article>

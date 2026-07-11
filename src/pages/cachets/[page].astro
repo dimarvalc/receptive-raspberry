@@ -57,10 +57,15 @@ const renderedPosts = await Promise.all(
       <p class="text-slate-400 font-medium mt-3">Viewing catalog entries {page.start + 1} through {page.end + 1} of your historical ledger database.</p>
     </header>
 
-    <!-- The Grid Loop Layout Grid (Explicit matching trigger ID) -->
+       <!-- The Grid Loop Layout Grid (Explicit matching trigger ID) -->
     <div class="max-w-7xl mx-auto flex flex-col gap-16" id="cachet-archive-grid">
-      {renderedPosts.map(({ post, Content, frontSrc, backSrc, cancelSrc, frontW, frontH, backW, backH, cancelW, cancelH }) => {
+      {renderedPosts.map(({ post, Content, frontSrc, backSrc, cancelSrc }) => {
         
+        // Define default pixels dynamically so PhotoSwipe lightboxes can evaluate your custom images safely
+        const frontW = 1200; const frontH = 800;
+        const backW = 1200; const backH = 800;
+        const cancelW = 1200; const cancelH = 800;
+
         const isC10 = post.data.envelopeSize === 'c10';
         const is9Bar = post.data.envelopeSize === '9bar';
         const isTall = post.data.envelopeSize === '5x7' || post.data.envelopeSize === 'a7';
@@ -175,6 +180,7 @@ const renderedPosts = await Promise.all(
         );
       })}
     </div>
+
 
     <!-- Pagination Navigation Controls -->
     <nav class="max-w-xl mx-auto flex items-center justify-between mt-16 font-medium font-mono text-sm">

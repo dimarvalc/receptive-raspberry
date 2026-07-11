@@ -1,3 +1,4 @@
+NEW [page].astro
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
@@ -25,7 +26,10 @@ const renderedPosts = await Promise.all(
     // Construct the dynamic path keys
     const frontKey = `/src/assets/cachets/${postItem.data.imageStem}-front-${postItem.data.envelopeSize}.webp`;
     const backKey = `/src/assets/cachets/${postItem.data.imageStem}-back-${postItem.data.envelopeSize}.webp`;
-    const cancelKey = `/src/assets/cachets/${postItem.data.imageStem}-front-cancel-${postItem.data.envelopeSize}.webp`;
+    
+    // Check if it's a simulated cover or official cancellation to map paths accurately
+    const cancelFileName = postItem.data.isSimulated ? 'cancel' : 'front-cancel';
+    const cancelKey = `/src/assets/cachets/${postItem.data.imageStem}-${cancelFileName}-${postItem.data.envelopeSize}.webp`;
 
     // Resolve the real static assets natively 
     const frontAsset = allImages[frontKey] ? await allImages[frontKey]() : null;
@@ -71,30 +75,47 @@ const renderedPosts = await Promise.all(
           <article class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm">
             
             <!-- Card Top Header Section -->
-            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-700/60 pb-4 mb-6 gap-2">
-              <div>
-                <span class="text-xs font-bold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 uppercase tracking-wider mr-2">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-700/60 pb-4 mb-6 gap-4">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 uppercase tracking-wider">
                   Size: {post.data.envelopeSize.toUpperCase()}
                 </span>
+                
+                <!-- Display Event badge only if field exists -->
+                {post.data.event && (
+                  <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 uppercase tracking-wider">
+                    🎪 {post.data.event}
+                  </span>
+                )}
+                
                 <span class="text-xs text-slate-400 font-mono">
                   {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })} • Sequence #{post.data.sequence}
                 </span>
               </div>
-              <h2 class="text-2xl font-black text-white tracking-tight">{post.data.title}</h2>
+              <h2 class="text-2xl font-black text-white tracking-tight text-center md:text-right">{post.data.title}</h2>
             </div>
 
-            <!-- 3-Column Visual Presentation Grid Matrix (Light canvas backings to keep envelope transparency perfect) -->
+            <!-- 3-Column Visual Presentation Grid Matrix -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               
               <!-- Front Canvas View -->
               <div class="flex flex-col justify-between">
-                <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
+                <div class={`relative bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {frontSrc ? (
                     <a href={frontSrc} data-pswp-width={frontW} data-pswp-height={frontH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
                       <img src={frontSrc} alt="Front Design View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
                     <div class="text-xs text-rose-500 font-mono">Front Image Missing</div>
+                  )}
+
+                  <!-- Red Warning overlay banner for Simulated Covers -->
+                  {post.data.isSimulated && (
+                    <div class="absolute top-2 right-2 pointer-events-none">
+                      <span class="bg-red-600/90 border border-red-500 text-white font-mono text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow shadow-red-950/50">
+                        Simulated
+                      </span>
+                    </div>
                   )}
                 </div>
                 <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design</p>
@@ -116,16 +137,27 @@ const renderedPosts = await Promise.all(
 
               <!-- Cancel Canvas View -->
               <div class="flex flex-col justify-between">
-                <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
-                  {post.data.hasCancel && cancelSrc ? (
+                <div class={`relative bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
+                  {(post.data.hasCancel || post.data.isSimulated) && cancelSrc ? (
                     <a href={cancelSrc} data-pswp-width={cancelW} data-pswp-height={cancelH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
                       <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
                     <div class="text-xs text-slate-500 italic font-mono flex items-center justify-center h-full">Uncanceled</div>
                   )}
+
+                  <!-- Overlay warning banner on cancel module if simulated -->
+                  {post.data.isSimulated && (
+                    <div class="absolute top-2 right-2 pointer-events-none">
+                      <span class="bg-red-600/90 border border-red-500 text-white font-mono text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow shadow-red-950/50">
+                        Simulated Mark
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <p class="text-[10px] font-bold text-center text-blue-400 mt-2 tracking-widest uppercase">Canceled Version</p>
+                <p class={`text-[10px] font-bold text-center mt-2 tracking-widest uppercase ${post.data.isSimulated ? 'text-red-400' : 'text-blue-400'}`}>
+                  {post.data.isSimulated ? 'Simulated Cancel' : 'Canceled Version'}
+                </p>
               </div>
 
             </div>
@@ -186,7 +218,3 @@ const renderedPosts = await Promise.all(
 
   lightbox.init();
 </script>
-
-
-
-

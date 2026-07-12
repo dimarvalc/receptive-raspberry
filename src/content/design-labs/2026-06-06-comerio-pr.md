@@ -18,8 +18,8 @@ We went through dozens of iterations. Early renders kept trying to introduce unw
 Here are some of the fascinating, highly-detailed concepts that **didn't make the cut** but showcase beautiful cross-hatching and stippling parameters:
 
 <div style="display: flex; gap: 1rem;">
-  <img src="/design-labs/2026-06-06-comerio-pr/Bicentenario-Comerio-2026-ArtCraft-Color-300dpi-Crop-Trans.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="/design-labs/2026-06-06-comerio-pr/Comerio-Montana-Amapola-ORIG-ARTCRAFT-FLEETWOOD-96dpi.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Bicentenario-Comerio-2026-ArtCraft-Color-300dpi-Crop-Trans.webp" style="width: 50%; object-fit: contain; background-color: #0f172a; border: 1px solid #334155; rounded-xl: 0.75rem; padding: 0.5rem;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Comerio-Montana-Amapola-ORIG-ARTCRAFT-FLEETWOOD-96dpi.webp" style="width: 50%; object-fit: contain; background-color: #0f172a; border: 1px solid #334155; rounded-xl: 0.75rem; padding: 0.5rem;" alt="Right Variant" />
 </div>
 
 <div style="display: flex; gap: 1rem;">

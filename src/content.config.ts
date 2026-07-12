@@ -14,6 +14,7 @@ const cachets = defineCollection({
     hasBack: z.boolean(),
     hasCancel: z.boolean(),
     imageStem: z.string(),
+    designLabKey: z.string().optional(),
   }),
 });
 

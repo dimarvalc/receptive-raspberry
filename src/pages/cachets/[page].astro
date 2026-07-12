@@ -86,7 +86,6 @@ const renderedPosts = await Promise.all(
         return (
           <article class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm">
             
-            <!-- Card Top Header Section -->
             <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-700/60 pb-4 mb-6 gap-2">
               <div>
                 <span class="text-xs font-bold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 uppercase tracking-wider mr-2">
@@ -99,10 +98,8 @@ const renderedPosts = await Promise.all(
               <h2 class="text-2xl font-black text-white tracking-tight">{post.data.title}</h2>
             </div>
 
-            <!-- 3-Column Visual Presentation Grid Matrix (Light canvas backings to keep envelope transparency perfect) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               
-              <!-- Front Canvas View -->
               <div class="flex flex-col justify-between">
                 <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {frontSrc ? (
@@ -116,7 +113,6 @@ const renderedPosts = await Promise.all(
                 <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Front Design</p>
               </div>
 
-              <!-- Back Canvas View -->
               <div class="flex flex-col justify-between">
                 <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {post.data.hasBack && backSrc ? (
@@ -130,7 +126,6 @@ const renderedPosts = await Promise.all(
                 <p class="text-[10px] font-bold text-center text-slate-400 mt-2 tracking-widest uppercase">Back Design</p>
               </div>
 
-              <!-- Cancel Canvas View -->
               <div class="flex flex-col justify-between">
                 <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
                   {/* 🎯 THE OVERRIDE RULE: Automatically opens the asset loader if hasCancel is true OR if isSimulated is true! */}
@@ -150,10 +145,8 @@ const renderedPosts = await Promise.all(
                 </p>
               </div>
 
-
             </div>
 
-            <!-- Content Area Text Segments with Custom Typography -->
             <div class="prose prose-invert prose-slate max-w-none border-t border-slate-700/60 pt-6 text-slate-300
               prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
               prose-p:leading-relaxed prose-p:text-slate-300
@@ -161,6 +154,25 @@ const renderedPosts = await Promise.all(
               prose-ul:list-disc prose-ul:pl-5 prose-li:my-1">
               <Content />
             </div>
+
+            {post.data.designLabKey && (
+              <div class="mt-6 p-5 bg-gradient-to-br from-purple-950/40 to-slate-950 border border-purple-500/20 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg shadow-purple-950/10">
+                <div class="space-y-1">
+                  <h4 class="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <span>🔬</span> Design Lab & Process History
+                  </h4>
+                  <p class="text-[11px] text-slate-400 leading-normal max-w-xl">
+                    Explore the complete creative journey behind this postmark event: Gemini prompt logs, rejected asset iterations, and final paint.NET compositions.
+                  </p>
+                </div>
+                <a 
+                  href={`/design-labs/${post.data.designLabKey}`}
+                  class="bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-mono text-[11px] font-bold px-4 py-2.5 rounded-lg transition-all duration-150 shadow-md hover:shadow-purple-500/20 whitespace-nowrap self-stretch sm:self-auto text-center"
+                >
+                  View Creation Log &rarr;
+                </a>
+              </div>
+            )}
 
           </article>
         );

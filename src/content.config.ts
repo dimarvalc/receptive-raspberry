@@ -76,4 +76,18 @@ const coins = defineCollection({
   }),
 });
 
-export const collections = { cachets, restorations, banknotes, stocks, coins };
+// src/content.config.ts
+
+// 6. Detailed Creation Logs & Design Process per Event
+const designLabs = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/design-labs" }),
+  schema: z.object({
+    title: z.string(),          // e.g., "Designing the 1974 Numismatic Anniversary Cover"
+    eventKey: z.string(),       // e.g., "numismatic-1974" (Matches the cachet event parameter)
+    pubDate: z.coerce.date(),
+    featuredImage: z.string(),  // A main concept image to show on the dashboard
+    summary: z.string(),        // Short teaser of the design journey
+  }),
+});
+
+export const collections = { cachets, restorations, banknotes, stocks, coins, designLabs }; 

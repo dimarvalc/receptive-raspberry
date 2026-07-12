@@ -2,15 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Fetch all 5 collection pipelines to calculate live dashboard analytics
+// Fetch all 6 collection pipelines to calculate live dashboard analytics
 const coins = await getCollection('coins');
 const banknotes = await getCollection('banknotes');
 const cachets = await getCollection('cachets'); // Philatelic items
 const stocks = await getCollection('stocks');   // Stocks & Bonds Certificates
 const restorations = await getCollection('restorations'); // AI Restorations Projects
+const designLabs = await getCollection('designLabs'); // 🔬 New Design Laboratories[cite: 5]
 
 // Calculate the grand total of cataloged items
-const totalAssets = coins.length + banknotes.length + cachets.length + stocks.length + restorations.length;
+const totalAssets = coins.length + banknotes.length + cachets.length + stocks.length + restorations.length + designLabs.length; //[cite: 5]
 ---
 
 <Layout title="TSL Digital Studio | Cultural Archives & Digital Preservation">
@@ -30,114 +31,136 @@ const totalAssets = coins.length + banknotes.length + cachets.length + stocks.le
     </header>
 
     <!-- Balanced Dynamic Grid Matrix Workspace Layout -->
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full items-stretch">
+    <div class="max-w-6xl mx-auto flex flex-col gap-8 w-full">
       
-      <!-- PORTAL 1: PHILATELIC ARCHIVE -->
-      <a href="/cachets/1" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-blue-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/0 via-blue-600/0 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-200">
-            ✉️
+      <!-- The Main 3-Column Portals Grid (Perfect 3x2 Matrix Layout) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch w-full">
+        
+        <!-- PORTAL 1: PHILATELIC ARCHIVE -->
+        <a href="/cachets/1" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-blue-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-600/0 via-blue-600/0 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              ✉️
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-blue-400 transition-colors duration-200">Philatelic Archive</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Browse through my complete catalog of historical custom cachet envelope designs. Features high-resolution digital lightbox zoom windows and file download tracking.
+            </p>
           </div>
-          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-blue-400 transition-colors duration-200">Philatelic Archive</h2>
-          <p class="text-slate-400 text-sm leading-relaxed mb-6">
-            Browse through my complete catalog of historical custom cachet envelope designs. Features high-resolution digital lightbox zoom windows and file download tracking.
-          </p>
-        </div>
-        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-blue-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
-          Enter Catalog Database <span>→</span>
-        </div>
-      </a>
-
-      <!-- PORTAL 2: WORLD BANKNOTES VAULT -->
-      <a href="/banknotes" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-emerald-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/0 via-emerald-600/0 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-200">
-            💵
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-blue-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Enter Catalog Database <span>→</span>
           </div>
-          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-emerald-400 transition-colors duration-200">Banknotes Vault</h2>
-          <p class="text-slate-400 text-sm leading-relaxed mb-6">
-            Review global paper currencies categorized by country, face values, and alphanumeric variety catalog numbers mapping back to standard museum identifiers.
-          </p>
-        </div>
-        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
-          Unlock Currency Vault <span>→</span>
-        </div>
-      </a>
+        </a>
 
-      <!-- PORTAL 3: HISTORICAL STOCKS LEDGER -->
-      <a href="/stocks" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-amber-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-amber-600/0 via-amber-600/0 to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform duration-200">
-            📜
+        <!-- PORTAL 2: WORLD BANKNOTES VAULT -->
+        <a href="/banknotes" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-emerald-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/0 via-emerald-600/0 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              💵
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-emerald-400 transition-colors duration-200">Banknotes Vault</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Review global paper currencies categorized by country, face values, and alphanumeric variety catalog numbers mapping back to standard museum identifiers.
+            </p>
           </div>
-          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-amber-400 transition-colors duration-200">Stocks & Bonds Ledger</h2>
-          <p class="text-slate-400 text-sm leading-relaxed mb-6">
-            Explore unique scripophily certificates cataloged by shared corporate volume tiers, border engraving variants, and unique historical serial numbers.
-          </p>
-        </div>
-        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-amber-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
-          Review Certificate Ledger <span>→</span>
-        </div>
-      </a>
-
-      <!-- PORTAL 4: NUMISMATIC COINS VAULT -->
-      <a href="/coins" class="group relative lg:col-start-1 bg-slate-800/40 border border-slate-700/50 hover:border-yellow-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-yellow-600/0 via-yellow-600/0 to-yellow-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition-transform duration-200">
-            🪙
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Unlock Currency Vault <span>→</span>
           </div>
-          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-yellow-400 transition-colors duration-200">Coins Vault</h2>
-          <p class="text-slate-400 text-sm leading-relaxed mb-6">
-            Step into the numismatic coin collection. Track historical strike dates, precise metallic compositions, grading scales, and obverse/reverse detailed photography.
-          </p>
-        </div>
-        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-yellow-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
-          Open Numismatic Vault <span>→</span>
-        </div>
-      </a>
+        </a>
 
-      <!-- PORTAL 5: AI PHOTO RESTORATION LAB -->
-      <a href="/restorations" class="group relative lg:col-start-2 bg-slate-800/40 border border-slate-700/50 hover:border-indigo-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/0 via-indigo-600/0 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-200">
-            🖼️
+        <!-- PORTAL 3: HISTORICAL STOCKS LEDGER -->
+        <a href="/stocks" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-amber-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-600/0 via-amber-600/0 to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              📜
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-amber-400 transition-colors duration-200">Stocks & Bonds Ledger</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Explore unique scripophily certificates cataloged by shared corporate volume tiers, border engraving variants, and unique historical serial numbers.
+            </p>
           </div>
-          <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-indigo-400 transition-colors duration-200">AI Photo Restoration Lab</h2>
-          <p class="text-slate-400 text-sm leading-relaxed mb-6">
-            Interact with our split-screen photo workspace. Move the custom drag handles back and forth to reveal pixel-by-pixel comparisons on restored graphics.
-          </p>
-        </div>
-        <div class="relative z-10 flex items-center text-xs font-bold font-mono text-indigo-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
-          Open Slider Studio <span>→</span>
-        </div>
-      </a>
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-amber-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Review Certificate Ledger <span>→</span>
+          </div>
+        </a>
 
-      <!-- 6th Card Slot: Archival Processing Metrics Dashboard -->
-      <div class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col justify-between group hover:border-purple-500/30 transition-all duration-300">
+        <!-- PORTAL 4: NUMISMATIC COINS VAULT -->
+        <a href="/coins" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-yellow-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-yellow-600/0 via-yellow-600/0 to-yellow-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              🪙
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-yellow-400 transition-colors duration-200">Coins Vault</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Step into the numismatic coin collection. Track historical strike dates, precise metallic compositions, grading scales, and obverse/reverse detailed photography.
+            </p>
+          </div>
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-yellow-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Open Numismatic Vault <span>→</span>
+          </div>
+        </a>
+
+        <!-- PORTAL 5: AI PHOTO RESTORATION LAB -->
+        <a href="/restorations" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-indigo-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/0 via-indigo-600/0 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              🖼️
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-indigo-400 transition-colors duration-200">AI Photo Restoration Lab</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Interact with our split-screen photo workspace. Move the custom drag handles back and forth to reveal pixel-by-pixel comparisons on restored graphics.
+            </p>
+          </div>
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-indigo-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Open Slider Studio <span>→</span>
+          </div>
+        </a>
+
+        <!-- PORTAL 6: DESIGN LABORATORIES (Completes the 3x2 Matrix) -->
+        <a href="/cachets/1" class="group relative bg-slate-800/40 border border-slate-700/50 hover:border-purple-500/40 p-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-900/10 via-purple-950/5 to-slate-900/10">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-600/0 via-purple-600/0 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform duration-200">
+              🔬
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-purple-400 transition-colors duration-200">Design Labs</h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+              Explore the detailed creative history behind cachet postmarks: review step-by-step text prompt iterations, asset variants, and final graphics compilation layers.
+            </p>
+          </div>
+          <div class="relative z-10 flex items-center text-xs font-bold font-mono text-purple-400 uppercase tracking-wider gap-1.5 group-hover:gap-3 transition-all duration-200">
+            Inspect Process Logs <span>→</span>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Full Width Row: Archival Processing Metrics Dashboard -->
+      <div class="bg-slate-800/40 border border-slate-700/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col justify-between group hover:border-purple-500/30 transition-all duration-300 w-full">
         <div>
           <!-- Thematic Badging -->
           <div class="flex items-center gap-2 mb-4">
             <span class="inline-block w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
             <span class="text-[10px] font-black tracking-widest uppercase bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded-full border border-purple-500/20">
-              System Status: Operational
+              System Status: Operational[cite: 5]
             </span>
           </div>
 
           <!-- Title and Subtitle Header -->
-          <h3 class="text-xl font-bold text-white tracking-tight mb-2">Archival Processing Metrics</h3>
+          <h3 class="text-xl font-bold text-white tracking-tight mb-2">Archival Processing Metrics[cite: 5]</h3>
           <p class="text-slate-400 text-xs leading-relaxed mb-6">
-            Live structural analytics monitoring data integrity, database ledger volume counts, and asset layer distribution channels.
+            Live structural analytics monitoring data integrity, database ledger volume counts, and asset layer distribution channels.[cite: 5]
           </p>
 
-          <!-- Refactored 6-Item Analytical Counter Grid Matrix -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+          <!-- Refactored 7-Item Analytical Counter Grid Matrix -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
             <!-- 1. Total Assets Master Count -->
-            <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-xl col-span-2 sm:col-span-3">
+            <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-xl col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-7">
               <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Vault Assets (Combined Ledger)</p>
               <p class="text-3xl font-black text-white font-mono tracking-tight">{totalAssets}</p>
             </div>
@@ -167,9 +190,15 @@ const totalAssets = coins.length + banknotes.length + cachets.length + stocks.le
             </div>
 
             <!-- 6. AI Photo Restoration Lab -->
-            <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-xl col-span-2 sm:col-span-1">
+            <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
               <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">AI Restorations</p>
               <p class="text-xl font-black text-emerald-400 font-mono tracking-tight">{restorations.length}</p>
+            </div>
+
+            <!-- 7. Design Laboratories -->
+            <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-xl bg-gradient-to-br from-slate-900 via-purple-950/20 to-slate-900 border-purple-500/20 col-span-2 sm:col-span-1">
+              <p class="text-[9px] font-bold text-purple-400 uppercase tracking-wider mb-1">Design Labs</p>
+              <p class="text-xl font-black text-purple-400 font-mono tracking-tight">{designLabs.length}</p>
             </div>
           </div>
         </div>
@@ -187,7 +216,6 @@ const totalAssets = coins.length + banknotes.length + cachets.length + stocks.le
         </div>
       </div>
 
-
     </div>
 
     <!-- Small Professional System Footer -->
@@ -197,5 +225,3 @@ const totalAssets = coins.length + banknotes.length + cachets.length + stocks.le
 
   </main>
 </Layout>
-
-

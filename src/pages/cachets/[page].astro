@@ -133,16 +133,18 @@ const renderedPosts = await Promise.all(
               <!-- Cancel Canvas View -->
               <div class="flex flex-col justify-between">
                 <div class={`bg-slate-900 border border-slate-700 p-3 rounded-xl flex items-center justify-center shadow-inner group hover:border-blue-500/50 transition-colors duration-150 ${aspectClass}`}>
+                  {/* 🎯 THE OVERRIDE RULE: Automatically opens the asset loader if hasCancel is true OR if isSimulated is true! */}
                   {(post.data.hasCancel || post.data.isSimulated) && cancelSrc ? (
                     <a href={cancelSrc} data-pswp-width={cancelW} data-pswp-height={cancelH} target="_blank" title="Click to view full-size design" class="lightbox-trigger w-full h-full flex items-center justify-center cursor-zoom-in">
-                      <img src={cancelSrc} alt="Official Postal Cancel View" class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
+                      <img src={cancelSrc} alt={post.data.isSimulated ? "Simulated Postmark View" : "Official Pictorial Postmark View"} class="w-full h-auto max-h-full object-contain filter drop-shadow-md group-hover:scale-[1.01] transition-transform duration-150" />
                     </a>
                   ) : (
                     <div class="text-xs text-slate-500 italic font-mono flex items-center justify-center h-full">
-                      {post.data.isSimulated ? "Simulated Cancel Missing" : "Uncanceled"}
+                      {post.data.isSimulated ? "Simulated Cancel Asset Missing" : "Uncanceled"}
                     </div>
                   )}
                 </div>
+                {/* 🎯 DYNAMIC TEXT LABEL: Automatically toggles the column text heading between options! */}
                 <p class="text-[10px] font-bold text-center text-blue-400 mt-2 tracking-widest uppercase">
                   {post.data.isSimulated ? "Simulated Postmark" : "Canceled Version"}
                 </p>

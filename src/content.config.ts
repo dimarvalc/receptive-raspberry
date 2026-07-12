@@ -9,6 +9,8 @@ const cachets = defineCollection({
     pubDate: z.coerce.date(),
     sequence: z.string(),
     envelopeSize: z.string(),
+    event: z.string().optional(),
+    isSimulated: z.boolean().optional().default(false),    
     hasBack: z.boolean(),
     hasCancel: z.boolean(),
     imageStem: z.string(),

@@ -26,16 +26,19 @@ const renderedPosts = await Promise.all(
     const frontKey = `/src/assets/cachets/${postItem.data.imageStem}-front-${postItem.data.envelopeSize}.webp`;
     const backKey = `/src/assets/cachets/${postItem.data.imageStem}-back-${postItem.data.envelopeSize}.webp`;
     
-    // Checks both standard and front-prefixed cancel filenames dynamically
+    // 🎯 CLEAN & MINIMAL: Just track one standard cancel string and one simulated string!
     const standardCancelKey = `/src/assets/cachets/${postItem.data.imageStem}-cancel-${postItem.data.envelopeSize}.webp`;
-    const frontCancelKey = `/src/assets/cachets/${postItem.data.imageStem}-front-cancel-${postItem.data.envelopeSize}.webp`;
+    const simulatedKey = `/src/assets/cachets/${postItem.data.imageStem}-simulated-${postItem.data.envelopeSize}.webp`;
 
     // Resolve the real static assets natively 
     const frontAsset = allImages[frontKey] ? await allImages[frontKey]() : null;
     const backAsset = allImages[backKey] ? await allImages[backKey]() : null;
-    const cancelAsset = allImages[standardCancelKey] 
-      ? await allImages[standardCancelKey]() 
-      : (allImages[frontCancelKey] ? await allImages[frontCancelKey]() : null);
+    
+    // 🎯 STREAMLINED LOOKUP: Pulls -simulated if flagged true, otherwise pulls the standard -cancel file
+    const cancelAsset = postItem.data.isSimulated
+      ? (allImages[simulatedKey] ? await allImages[simulatedKey]() : null)
+      : (allImages[standardCancelKey] ? await allImages[standardCancelKey]() : null);
+
 
     return { 
       post: postItem, 

@@ -2,7 +2,7 @@
 title: "Design Lab: Commemorating the Numismatic Emblem"
 eventKey: "2026-06-06-comerio-pr"
 pubDate: 2026-07-12
-featuredImage: "../../assets/design-labs/2026-06-06-comerio-pr/comerio-200th-16-9.webp"
+featuredImage: "/design-labs/2026-06-06-comerio-pr/comerio-200th-16-9.webp"
 summary: "A breakdown of 45+ generated concepts, transitioning from complex 3D slants to a perfectly flat, steel-die engraved look."
 ---
 
@@ -18,18 +18,18 @@ We went through dozens of iterations. Early renders kept trying to introduce unw
 Here are some of the fascinating, highly-detailed concepts that **didn't make the cut** but showcase beautiful cross-hatching and stippling parameters:
 
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Bicentenario-Comerio-2026-ArtCraft-Color-300dpi-Crop-Trans.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Comerio-Montana-Amapola-ORIG-ARTCRAFT-FLEETWOOD-96dpi.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Bicentenario-Comerio-2026-ArtCraft-Color-300dpi-Crop-Trans.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Comerio-Montana-Amapola-ORIG-ARTCRAFT-FLEETWOOD-96dpi.webp" style="width: 50%;" alt="Right Variant" />
 </div>
 
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-93z38i93z38i93z3.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-akobo9akobo9akob.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-93z38i93z38i93z3.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-akobo9akobo9akob.webp" style="width: 50%;" alt="Right Variant" />
 </div>
 
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-bwwgz0bwwgz0bwwg.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-kekvf2kekvf2kekv.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-bwwgz0bwwgz0bwwg.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-kekvf2kekvf2kekv.webp" style="width: 50%;" alt="Right Variant" />
 </div>
 
 
@@ -47,14 +47,14 @@ Once Gemini produced a flawless central motif, I took it into **paint.NET** to:
 These are some of the changes I made to the logos I used in the design:
 
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-8xwaus8xwaus8xwa.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-65xy3065xy3065xy.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-8xwaus8xwaus8xwa.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-65xy3065xy3065xy.webp" style="width: 50%;" alt="Right Variant" />
 </div>
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-tyuywtyuywtyuywt.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-uvg6cwuvg6cwuvg6.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-tyuywtyuywtyuywt.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Gemini-Generated-Image-uvg6cwuvg6cwuvg6.webp" style="width: 50%;" alt="Right Variant" />
 </div>
 <div style="display: flex; gap: 1rem;">
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Industria-de-Tabaco-en-Comerio-300dpi-White-Back.webp" style="width: 50%;" alt="Left Variant" />
-  <img src="../../assets/design-labs/2026-06-06-comerio-pr/Logo-Autoridad-Fuentes-Fluviales-PR-BW-300dpi-Crop.webp" style="width: 50%;" alt="Right Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Industria-de-Tabaco-en-Comerio-300dpi-White-Back.webp" style="width: 50%;" alt="Left Variant" />
+  <img src="/design-labs/2026-06-06-comerio-pr/Logo-Autoridad-Fuentes-Fluviales-PR-BW-300dpi-Crop.webp" style="width: 50%;" alt="Right Variant" />
 </div>
